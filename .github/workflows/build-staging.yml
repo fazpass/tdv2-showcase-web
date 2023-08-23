@@ -1,0 +1,33 @@
+name: Push to GCR GitHub Action tdv2-showcase-web Staging
+on:
+  push:
+    branches:
+      - main
+
+env:
+  REGISTRY: asia.gcr.io
+  REGISTRY_NAME: tdv2-showcase-web
+  PROJECT_ID: ascendant-chain-336811
+  SHA: ${GITHUB_SHA}
+
+
+jobs:
+  build-and-push-staging:
+    runs-on: self-hosted
+    steps:  
+      - uses: actions/checkout@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Set version tag
+        id: vars
+        run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
+
+      - uses: RafikFarhad/push-to-gcr-github-action@v4.1
+        with:
+          gcloud_service_key: ${{ secrets.GCLOUD_SERVICE_KEY }}
+          registry: ${{ env.REGISTRY }}
+          project_id: ${{ env.PROJECT_ID }}
+          image_name: ${{ env.REGISTRY_NAME }}
+          image_tag: latest,${{ steps.vars.outputs.sha_short }}
