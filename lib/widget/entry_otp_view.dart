@@ -38,7 +38,7 @@ class EntryOtpView extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    DateParser.millisDateToDisplay(data.timestamp),
+                    DateParser.dateToDisplay(data.time),
                     style: const TextStyle(
                       fontSize: 18.0,
                       fontWeight: FontWeight.w500,

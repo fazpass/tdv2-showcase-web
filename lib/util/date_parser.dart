@@ -1,21 +1,11 @@
 
-import 'package:timezone/browser.dart' as tz;
-
-import 'constants.dart';
-
 class DateParser {
 
-  static millisDateToDisplay(int millis) {
-    String dateString = tz.TZDateTime.fromMillisecondsSinceEpoch(Constants.jakarta, millis).toString();
-    String firstPart = dateString.split(':')[0];
-    String secondPart = dateString.split(':')[1];
-    return '$firstPart:$secondPart';
-  }
-
-  static nowDateToDisplay() {
-    String dateString = tz.TZDateTime.from(DateTime.now(), Constants.jakarta).toString();
-    String firstPart = dateString.split(':')[0];
-    String secondPart = dateString.split(':')[1];
-    return '$firstPart:$secondPart';
+  static dateToDisplay(String dateString) {
+    String firstPart = dateString.split(' ')[0];
+    String secondPart = dateString.split(' ')[1];
+    String second1stPart = secondPart.split(':')[0];
+    String second2ndPart = secondPart.split(':')[1];
+    return '$firstPart $second1stPart:$second2ndPart';
   }
 }

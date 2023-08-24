@@ -1,6 +1,4 @@
 
-import 'package:timezone/browser.dart' as tz;
-
 class Constants {
   /// in milliseconds
   static const entryViewAnimationDuration = 1000;
@@ -28,6 +26,4 @@ class Constants {
       'Completed.',
     ],
   };
-
-  static late tz.Location jakarta;
 }

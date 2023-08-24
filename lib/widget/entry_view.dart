@@ -83,7 +83,7 @@ class _EntryViewState extends State<EntryView> {
                     ),
                   ),
                   Text(
-                    DateParser.millisDateToDisplay(widget.data.timestamp),
+                    DateParser.dateToDisplay(widget.data.time),
                     style: const TextStyle(
                       fontSize: 18.0,
                       fontWeight: FontWeight.w500,

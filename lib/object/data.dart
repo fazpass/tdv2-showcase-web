@@ -27,15 +27,17 @@ sealed class Data {}
 }*/
 
 class EntryData extends Data {
-  EntryData(this.key, this.timestamp, this.type, this.meta);
+  EntryData(this.key, this.time, this.timestamp, this.type, this.meta);
 
   EntryData.fromSnapshot(DataSnapshot s)
       : key = s.key!,
+        time = s.child('time').value as String,
         timestamp = ((s.child('timestamp').value as double) * 1000).toInt(),
         type = s.child('type').value as String,
         meta = _pickMeta(s);
 
   final String key;
+  final String time;
   final int timestamp;
   final String type;
   final Meta? meta;
