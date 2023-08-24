@@ -6,14 +6,23 @@ import 'package:flutter/material.dart';
 import 'package:tdv2_showcase_web/firebase_options.dart';
 import 'package:tdv2_showcase_web/object/data.dart';
 import 'package:tdv2_showcase_web/object/meta.dart';
+import 'package:tdv2_showcase_web/util/constants.dart';
 import 'package:tdv2_showcase_web/widget/entry_otp_view.dart';
 import 'package:tdv2_showcase_web/widget/entry_view.dart';
 import 'package:tdv2_showcase_web/widget/phone_field.dart';
 import 'package:tdv2_showcase_web/widget/timeline_diagram_view.dart';
+import 'package:timezone/browser.dart' as tz;
+
+Future<void> setupTimezone() async {
+  await tz.initializeTimeZone();
+  Constants.jakarta = tz.getLocation('Asia/Jakarta');
+  tz.setLocalLocation(Constants.jakarta);
+}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await setupTimezone();
   runApp(const MyApp());
 }
 

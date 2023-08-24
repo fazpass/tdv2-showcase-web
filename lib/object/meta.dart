@@ -61,6 +61,17 @@ class FazpassMeta extends Meta {
   final FazpassMetaGeolocation geolocation;
 }
 
+class FazpassValidateMeta extends FazpassMeta {
+
+  FazpassValidateMeta.fromSnapshot(DataSnapshot s)
+      : risk_level = s.child('risk_level').value as String,
+        scoring = s.child('scoring').value as int,
+        super.fromSnapshot(s);
+
+  final String risk_level;
+  final int scoring;
+}
+
 class FazpassRemoveMeta extends Meta {
   FazpassRemoveMeta(this.application, this.platform, this.fazpass_id,
       this.time_stamp, this.is_active, this.device_id, this.geolocation);

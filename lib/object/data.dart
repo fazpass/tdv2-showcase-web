@@ -31,7 +31,7 @@ class EntryData extends Data {
 
   EntryData.fromSnapshot(DataSnapshot s)
       : key = s.key!,
-        timestamp = s.child('timestamp').value as int,
+        timestamp = ((s.child('timestamp').value as double) * 1000).toInt(),
         type = s.child('type').value as String,
         meta = _pickMeta(s);
 
@@ -47,6 +47,8 @@ class EntryData extends Data {
       return OtpMeta.fromSnapshot(s.child('meta'));
     } else if (type == 'remove') {
       return FazpassRemoveMeta.fromSnapshot(s.child('meta'));
+    } else if (type == 'validate') {
+      return FazpassValidateMeta.fromSnapshot(s.child('meta'));
     } else {
       return FazpassMeta.fromSnapshot(s.child('meta'));
     }

@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:tdv2_showcase_web/object/data.dart';
 import 'package:tdv2_showcase_web/object/meta.dart';
+import 'package:tdv2_showcase_web/util/date_parser.dart';
 
 import 'otp_comparing_view.dart';
 
@@ -37,7 +38,7 @@ class EntryOtpView extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    DateTime.fromMillisecondsSinceEpoch(data.timestamp).toString(),
+                    DateParser.millisDateToDisplay(data.timestamp),
                     style: const TextStyle(
                       fontSize: 18.0,
                       fontWeight: FontWeight.w500,

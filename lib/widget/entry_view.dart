@@ -3,8 +3,10 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:tdv2_showcase_web/object/data.dart';
+import 'package:tdv2_showcase_web/object/meta.dart';
 import 'package:tdv2_showcase_web/util/color_picker.dart';
 import 'package:tdv2_showcase_web/util/constants.dart';
+import 'package:tdv2_showcase_web/util/date_parser.dart';
 import 'package:tdv2_showcase_web/widget/fazpass_meta_view.dart';
 
 class EntryView extends StatefulWidget {
@@ -61,7 +63,7 @@ class _EntryViewState extends State<EntryView> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Padding(
-          padding: const EdgeInsets.all(28.0),
+          padding: const EdgeInsets.all(24.0).copyWith(bottom: 18),
           child: Row(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -81,10 +83,58 @@ class _EntryViewState extends State<EntryView> {
                     ),
                   ),
                   Text(
-                    DateTime.fromMillisecondsSinceEpoch(widget.data.timestamp).toString(),
+                    DateParser.millisDateToDisplay(widget.data.timestamp),
                     style: const TextStyle(
                       fontSize: 18.0,
                       fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  if (widget.data.meta is FazpassValidateMeta) Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text.rich(
+                          TextSpan(
+                            text: 'Score: ',
+                            style: const TextStyle(
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.w600,
+                            ),
+                            children: [
+                              TextSpan(
+                                text: '${(widget.data.meta as FazpassValidateMeta).scoring}',
+                                style: const TextStyle(
+                                  fontSize: 18.0,
+                                  fontWeight: FontWeight.normal,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Text.rich(
+                          TextSpan(
+                            text: 'Risk level: ',
+                            style: const TextStyle(
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.w600,
+                            ),
+                            children: [
+                              TextSpan(
+                                text: (widget.data.meta as FazpassValidateMeta).risk_level,
+                                style: TextStyle(
+                                  fontSize: 18.0,
+                                  fontWeight: FontWeight.normal,
+                                  color: (widget.data.meta as FazpassValidateMeta).risk_level.toLowerCase() == 'low'
+                                      ? Colors.green
+                                      : Colors.red,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
@@ -97,10 +147,7 @@ class _EntryViewState extends State<EntryView> {
                   size: 76.0,
                   color: ColorPicker.pickColorByDataType(widget.data.type),
                 )
-                    : const SizedBox.square(
-                  dimension: 58.0,
-                  /*child: CircularProgressIndicator(color: ColorPicker.pickColorByDataType(widget.data.type)),*/
-                ),
+                    : const SizedBox.square(dimension: 58.0),
               ),
             ],
           ),
