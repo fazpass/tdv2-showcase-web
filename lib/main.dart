@@ -8,9 +8,8 @@ import 'package:tdv2_showcase_web/object/data.dart';
 import 'package:tdv2_showcase_web/object/meta.dart';
 import 'package:tdv2_showcase_web/widget/entry_otp_view.dart';
 import 'package:tdv2_showcase_web/widget/entry_view.dart';
-import 'package:tdv2_showcase_web/widget/expected_entry_view.dart';
 import 'package:tdv2_showcase_web/widget/phone_field.dart';
-import 'package:tdv2_showcase_web/widget/timeline_diagram.dart';
+import 'package:tdv2_showcase_web/widget/timeline_diagram_view.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -53,8 +52,8 @@ class _MyHomePageState extends State<MyHomePage> {
   final listKey = GlobalKey<SliverAnimatedListState>();
   SliverAnimatedListState get listState => listKey.currentState!;
 
-  final timelineKey = GlobalKey<TimelineDiagramState>();
-  TimelineDiagramState get timelineState => timelineKey.currentState!;
+  final timelineKey = GlobalKey<TimelineDiagramViewState>();
+  TimelineDiagramViewState get timelineState => timelineKey.currentState!;
 
   StreamSubscription<DatabaseEvent>? onChildChanged;
 
@@ -98,9 +97,7 @@ class _MyHomePageState extends State<MyHomePage> {
       } catch (_) {}
     }
 
-    // add data placeholder
-    final lastAction = (list.last as EntryData).type;
-    list.add(ExpectedEntryData(lastAction));
+    // insert all items to list widget and timeline widget
     listState.insertAllItems(0, list.length);
     timelineState.insertInitialData(list);
 
@@ -111,11 +108,11 @@ class _MyHomePageState extends State<MyHomePage> {
       EntryData data = EntryData.fromSnapshot(event.snapshot)
         ..shouldAnimate=true;
 
-      if (list.isNotEmpty && list.last is ExpectedEntryData) {
+      /*if (list.isNotEmpty && list.last is ExpectedEntryData) {
         int index0 = list.length-1;
         Data data0 = list.removeAt(index0);
         listState.removeItem(index0, (context, animation) => _itemRemovedBuilder(context, animation, data0));
-      }
+      }*/
 
       queueList.add(data);
       timelineState.insert(data);
@@ -146,20 +143,20 @@ class _MyHomePageState extends State<MyHomePage> {
       });
     }
 
-    if (queueList.isEmpty && list.last is EntryData) {
+    /*if (queueList.isEmpty && list.last is EntryData) {
       int index = list.length;
       EntryData entryData = list.last as EntryData;
       list.insert(index, ExpectedEntryData(entryData.type));
       listState.insertItem(index);
-    }
+    }*/
   }
 
   showTimelineDiagram() {
     showBottomSheet(
       context: scaffoldContext!,
       enableDrag: false,
-      constraints: const BoxConstraints(maxHeight: TimelineDiagramState.sheetHeight),
-      builder: (context) => TimelineDiagram(key: timelineKey),
+      constraints: const BoxConstraints(maxHeight: TimelineDiagramViewState.sheetHeight),
+      builder: (context) => TimelineDiagramView(key: timelineKey),
     );
   }
 
@@ -261,13 +258,13 @@ class _MyHomePageState extends State<MyHomePage> {
         if (data.meta is OtpMeta) {
           if (data.shouldAnimate) onFinishEntryAnimation();
           return EntryOtpView(data: data);
-        } else if (data.meta is FazpassMeta) {
+        } else if (data.meta is FazpassMeta || data.meta is FazpassRemoveMeta) {
           return EntryView(data: data, onFinished: onFinishEntryAnimation);
         }
         return const SizedBox();
-      case ExpectedEntryData:
+      /*case ExpectedEntryData:
         data as ExpectedEntryData;
-        return ExpectedEntryView(action: data.expectedType);
+        return ExpectedEntryView(action: data.expectedType);*/
       default:
         return const Card(
           child: SizedBox(height: 120),

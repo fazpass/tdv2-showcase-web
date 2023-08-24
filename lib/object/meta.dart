@@ -61,6 +61,28 @@ class FazpassMeta extends Meta {
   final FazpassMetaGeolocation geolocation;
 }
 
+class FazpassRemoveMeta extends Meta {
+  FazpassRemoveMeta(this.application, this.platform, this.fazpass_id,
+      this.time_stamp, this.is_active, this.device_id, this.geolocation);
+
+  FazpassRemoveMeta.fromSnapshot(DataSnapshot s)
+      : application = s.child('application').value as String,
+        platform = s.child('platform').value as String,
+        fazpass_id = s.child('fazpass_id').value as String,
+        time_stamp = s.child('time_stamp').value as String,
+        is_active = s.child('is_active').value as bool,
+        device_id = FazpassMetaDevice.fromSnapshot(s.child('device_id')),
+        geolocation = FazpassMetaGeolocation.fromSnapshot(s.child('geolocation'));
+
+  final String application;
+  final String platform;
+  final String fazpass_id;
+  final String time_stamp;
+  final bool is_active;
+  final FazpassMetaDevice device_id;
+  final FazpassMetaGeolocation geolocation;
+}
+
 class FazpassMetaDevice {
   FazpassMetaDevice(this.cpu, this.name, this.os_version, this.series);
 

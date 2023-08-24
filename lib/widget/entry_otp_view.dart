@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:tdv2_showcase_web/object/data.dart';
 import 'package:tdv2_showcase_web/object/meta.dart';
 
-import 'otp_comparing_field.dart';
+import 'otp_comparing_view.dart';
 
 class EntryOtpView extends StatelessWidget {
   const EntryOtpView({super.key, required this.data});
@@ -54,7 +54,7 @@ class EntryOtpView extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.only(top: 16.0),
-            child: OtpComparingField(data.meta as OtpMeta),
+            child: OtpComparingView(data.meta as OtpMeta),
           ),
         ],
       ),

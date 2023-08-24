@@ -3,11 +3,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:tdv2_showcase_web/object/data.dart';
-import 'package:tdv2_showcase_web/object/meta.dart';
 import 'package:tdv2_showcase_web/util/color_picker.dart';
 import 'package:tdv2_showcase_web/util/constants.dart';
-
-import 'fazpass_info_field.dart';
+import 'package:tdv2_showcase_web/widget/fazpass_meta_view.dart';
 
 class EntryView extends StatefulWidget {
   const EntryView({super.key, required this.data, required this.onFinished});
@@ -21,30 +19,6 @@ class EntryView extends StatefulWidget {
 
 class _EntryViewState extends State<EntryView> {
 
-  Map<String, List<String>> loadingMessages = {
-    'Check': [
-      'Extracting Data...',
-      'Querying Data...',
-      'Completed.',
-    ],
-    'Enroll': [
-      'Extracting Data...',
-      'Registering Data...',
-      'Completed.',
-    ],
-    'Validate': [
-      'Extracting Data...',
-      'Clustering User...',
-      'Labeling User...',
-      'Classify Behaviour...',
-      'Completed.',
-    ],
-    'Remove': [
-      'Removing User...',
-      'Completed.',
-    ],
-  };
-
   late List<String> messages;
   List<Tween<double>> animations = [];
   List<Interval> intervals = [];
@@ -55,7 +29,7 @@ class _EntryViewState extends State<EntryView> {
   void initState() {
     super.initState();
 
-    messages = loadingMessages[widget.data.type] ?? [];
+    messages = Constants.entryViewLoadingMessages[widget.data.type] ?? [];
 
     final animationsLength = messages.length + 1;
     for (var i = 0; i < animationsLength; i++) {
@@ -123,9 +97,9 @@ class _EntryViewState extends State<EntryView> {
                   size: 76.0,
                   color: ColorPicker.pickColorByDataType(widget.data.type),
                 )
-                    : SizedBox.square(
+                    : const SizedBox.square(
                   dimension: 58.0,
-                  child: CircularProgressIndicator(color: ColorPicker.pickColorByDataType(widget.data.type)),
+                  /*child: CircularProgressIndicator(color: ColorPicker.pickColorByDataType(widget.data.type)),*/
                 ),
               ),
             ],
@@ -139,12 +113,12 @@ class _EntryViewState extends State<EntryView> {
           message: messages[i],
           shouldAnimate: widget.data.shouldAnimate,
         ),
-        if (widget.data.meta != null) _AnimatedMetaTile(
-          key: ValueKey('${widget.data.key}:meta-tile'),
+        if (widget.data.meta != null) FazpassMetaView(
+          key: ValueKey('${widget.data.key}:meta-view'),
           tween: animations.last,
           interval: intervals.last,
           duration: Constants.entryViewAnimationDuration * animations.length,
-          meta: widget.data.meta as FazpassMeta,
+          meta: widget.data.meta!,
           shouldAnimate: widget.data.shouldAnimate,
         ),
       ],
@@ -215,77 +189,4 @@ class _AnimatedListTileState extends State<_AnimatedListTile> with SingleTickerP
     child: child,
   ) : child;
 
-}
-
-class _AnimatedMetaTile extends StatefulWidget {
-  const _AnimatedMetaTile({
-    super.key,
-    required this.tween,
-    required this.interval,
-    required this.duration,
-    required this.meta,
-    required this.shouldAnimate,
-  });
-
-  final Tween<double> tween;
-  final Interval interval;
-  final int duration;
-  final FazpassMeta meta;
-  final bool shouldAnimate;
-
-  @override
-  State<StatefulWidget> createState() => _AnimatedMetaTileState();
-}
-
-class _AnimatedMetaTileState extends State<_AnimatedMetaTile> with SingleTickerProviderStateMixin {
-
-  late AnimationController controller;
-  late Animation<double> animation;
-
-  @override
-  void initState() {
-    super.initState();
-
-    if (widget.shouldAnimate) {
-      controller = AnimationController(
-        vsync: this,
-        duration: Duration(milliseconds: widget.duration),
-        value: widget.shouldAnimate ? 0.0 : 1.0,
-      );
-      animation = widget.tween.animate(CurvedAnimation(
-        parent: controller,
-        curve: widget.interval,
-      ));
-
-      controller.forward();
-    }
-  }
-
-  @override
-  void dispose() {
-    if (widget.shouldAnimate) controller.dispose();
-    super.dispose();
-  }
-
-  late Widget child = ExpansionTile(
-    title: const Text(
-      'Detail',
-      style: TextStyle(
-        fontSize: 16,
-        fontWeight: FontWeight.w500,
-      ),
-    ),
-    expandedCrossAxisAlignment: CrossAxisAlignment.stretch,
-    childrenPadding: const EdgeInsets.all(16),
-    children: [
-      FazpassInfoField(widget.meta),
-    ],
-  );
-
-  @override
-  Widget build(BuildContext context) => widget.shouldAnimate ?
-  SizeTransition(
-    sizeFactor: animation,
-    child: child,
-  ) : child;
 }

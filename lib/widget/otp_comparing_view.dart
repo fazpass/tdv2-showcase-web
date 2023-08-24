@@ -10,10 +10,10 @@ class OtpItem {
   bool isBest = false;
 }
 
-class OtpComparingField extends StatelessWidget {
-  const OtpComparingField._(this.items);
+class OtpComparingView extends StatelessWidget {
+  const OtpComparingView._(this.items);
 
-  factory OtpComparingField(OtpMeta meta) {
+  factory OtpComparingView(OtpMeta meta) {
     final items = <OtpItem>[
       OtpItem('WA', meta.WA),
       OtpItem('Citcall SMS', meta.citcallSMS),
@@ -27,7 +27,7 @@ class OtpComparingField extends StatelessWidget {
     }
     bestItem.isBest = true;
 
-    return OtpComparingField._(items);
+    return OtpComparingView._(items);
   }
 
   final List<OtpItem> items;

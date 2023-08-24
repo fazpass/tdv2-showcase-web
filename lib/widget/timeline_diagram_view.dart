@@ -6,14 +6,14 @@ import 'package:tdv2_showcase_web/object/data.dart';
 import 'package:tdv2_showcase_web/object/meta.dart';
 import 'package:tdv2_showcase_web/util/color_picker.dart';
 
-class TimelineDiagram extends StatefulWidget {
-  const TimelineDiagram({super.key});
+class TimelineDiagramView extends StatefulWidget {
+  const TimelineDiagramView({super.key});
 
   @override
-  TimelineDiagramState createState() => TimelineDiagramState();
+  TimelineDiagramViewState createState() => TimelineDiagramViewState();
 }
 
-class TimelineDiagramState extends State<TimelineDiagram> {
+class TimelineDiagramViewState extends State<TimelineDiagramView> {
 
   static const sheetHeight = 120.0;
 
@@ -45,13 +45,13 @@ class TimelineDiagramState extends State<TimelineDiagram> {
   }
 
   void insert(EntryData data) {
-    if (data.meta is OtpMeta) return;
+    if (data.type.toLowerCase().contains('otp')) return;
 
-    if (_queueList.isEmpty) {
+    /*if (_queueList.isEmpty) {
       int index0 = _list.length-1;
       Data data0 = _list.removeAt(index0);
       _listState.removeItem(index0, (context, animation) => _itemRemovedBuilder(context, animation, data0));
-    }
+    }*/
     _queueList.add(data);
 
     _onChildAddedTimer?.cancel();
@@ -63,10 +63,10 @@ class TimelineDiagramState extends State<TimelineDiagram> {
       }
       _queueList.clear();
 
-      int index2 = _list.length;
+      /*int index2 = _list.length;
       EntryData entryData = _list.last as EntryData;
       _list.insert(index2, ExpectedEntryData(entryData.type));
-      _listState.insertItem(index2);
+      _listState.insertItem(index2);*/
 
       _doScrollToTheEnd();
     });
@@ -82,12 +82,12 @@ class TimelineDiagramState extends State<TimelineDiagram> {
       Data data1 = _list.removeAt(index1);
       _listState.removeItem(index1, (context, animation) => _itemRemovedBuilder(context, animation, data1));
 
-      Timer(const Duration(milliseconds: 300), () {
+      /*Timer(const Duration(milliseconds: 300), () {
         int index2 = _list.length;
         EntryData entryData = _list.last as EntryData;
         _list.insert(index2, ExpectedEntryData(entryData.type));
         _listState.insertItem(index2);
-      });
+      });*/
     }
   }
 
@@ -206,7 +206,7 @@ class TimelineDiagramState extends State<TimelineDiagram> {
             ),
           ],
         );
-      case ExpectedEntryData:
+      /*case ExpectedEntryData:
         data as ExpectedEntryData;
         return Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -226,7 +226,7 @@ class TimelineDiagramState extends State<TimelineDiagram> {
               ),
             ),
           ],
-        );
+        );*/
       default:
         return const SizedBox.square(dimension: _rowHeight);
     }
