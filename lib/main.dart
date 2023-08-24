@@ -19,10 +19,7 @@ Future<void> setupTimezone() async {
   tz.setLocalLocation(Constants.jakarta);
 }
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  await setupTimezone();
+void main() {
   runApp(const MyApp());
 }
 
@@ -175,6 +172,8 @@ class _MyHomePageState extends State<MyHomePage> {
     WidgetsFlutterBinding.ensureInitialized().addPostFrameCallback((timeStamp) {
       showTimelineDiagram();
     });
+    Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+    setupTimezone();
   }
 
   @override
